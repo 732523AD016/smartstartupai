@@ -1,0 +1,148 @@
+export const INDUSTRIES = [
+  { id: 'HealthTech', label: 'HealthTech', emoji: '🏥' },
+  { id: 'EdTech', label: 'EdTech', emoji: '📚' },
+  { id: 'FinTech', label: 'FinTech', emoji: '💰' },
+  { id: 'AgriTech', label: 'AgriTech', emoji: '🌾' },
+  { id: 'RetailTech', label: 'RetailTech', emoji: '🛍️' },
+  { id: 'CleanTech', label: 'CleanTech', emoji: '♻️' },
+  { id: 'LegalTech', label: 'LegalTech', emoji: '⚖️' },
+  { id: 'HRTech', label: 'HRTech', emoji: '👥' },
+  { id: 'Logistics', label: 'Logistics', emoji: '🚚' },
+  { id: 'FoodTech', label: 'FoodTech', emoji: '🍱' },
+  { id: 'PropTech', label: 'PropTech', emoji: '🏠' },
+  { id: 'SocialImpact', label: 'Impact', emoji: '💡' },
+];
+ 
+export const AI_FEATURES = [
+  '🤖 AI Personalization',
+  '📊 Predictive Analytics',
+  '💬 NLP Chatbot',
+  '👁️ Computer Vision',
+  '🔊 Voice AI',
+  '🗺️ Recommendation Engine',
+  '🔒 Fraud Detection',
+  '🌐 Multi-language AI',
+  '🧬 Generative AI',
+  '📱 Edge AI',
+  '⚡ AutoML',
+  '🔍 Semantic Search',
+];
+ 
+export const AUDIENCES = [
+  { id: 'B2C', label: 'B2C', desc: 'End consumers', icon: '👤' },
+  { id: 'B2B', label: 'B2B', desc: 'Businesses', icon: '🏢' },
+  { id: 'B2B2C', label: 'B2B2C', desc: 'Hybrid model', icon: '🔄' },
+  { id: 'Enterprise', label: 'Enterprise', desc: 'Large corps', icon: '🏛️' },
+  { id: 'Government', label: 'Gov / NGO', desc: 'Public sector', icon: '🏛️' },
+  { id: 'SMBs', label: 'SMBs', desc: 'Small businesses', icon: '🛍️' },
+];
+ 
+export const TRENDING_IDEAS = [
+  {
+    id: 1, name: 'VernacularMD', sub: 'AI doctor in local language for rural India',
+    ind: 'HealthTech', hot: true,
+    problem: 'Rural patients struggle to communicate symptoms in English.',
+    solution: 'Voice AI diagnostic in 22 Indian languages with triage.',
+    revenue: '₹99/consultation + hospital licensing',
+    market: '$4.2B TAM India rural health',
+    tags: ['#HealthTech', '#NLP', '#Rural'],
+  },
+  {
+    id: 2, name: 'KiranaIQ', sub: 'Smart inventory AI for neighbourhood stores',
+    ind: 'RetailTech', hot: true,
+    problem: 'Kirana stores lose 30% revenue from stockout/overstock.',
+    solution: 'WhatsApp-integrated AI for demand prediction and reordering.',
+    revenue: 'SaaS ₹999/mo + supplier commission',
+    market: '$120B kirana market India',
+    tags: ['#RetailTech', '#SMB', '#AI'],
+  },
+  {
+    id: 3, name: 'AgriSense', sub: 'Crop disease detection via smartphone',
+    ind: 'AgriTech', hot: false,
+    problem: 'Farmers lose 25% crops due to late disease detection.',
+    solution: 'Computer vision AI detecting 50+ diseases from photos.',
+    revenue: 'Freemium + insurance partnerships',
+    market: '$8.3B precision farming India',
+    tags: ['#AgriTech', '#CV', '#Farmers'],
+  },
+  {
+    id: 4, name: 'SkillBridge AI', sub: 'Career coach for first-gen graduates',
+    ind: 'EdTech', hot: true,
+    problem: 'First-gen grads lack networks — 40% lower employment.',
+    solution: 'AI mentor for career paths, resume, mock interviews.',
+    revenue: '$9/mo + placement success fee',
+    market: '$6B career coaching market',
+    tags: ['#EdTech', '#Career', '#AI'],
+  },
+  {
+    id: 5, name: 'LegalEase', sub: 'Plain-language contract AI for MSMEs',
+    ind: 'LegalTech', hot: false,
+    problem: 'MSMEs sign risky contracts blindly, losing ₹2B+ annually.',
+    solution: 'AI flags contract risks in Tamil, Hindi, English.',
+    revenue: '₹99/doc + monthly SaaS',
+    market: '$3.2B SME legal market',
+    tags: ['#LegalTech', '#NLP', '#MSME'],
+  },
+  {
+    id: 6, name: 'CarbonTrace', sub: 'Supply chain carbon footprint AI',
+    ind: 'CleanTech', hot: true,
+    problem: 'Companies cannot measure Scope 3 emissions accurately.',
+    solution: 'IoT + AI platform for supply chain carbon monitoring.',
+    revenue: 'Enterprise SaaS $2K/mo',
+    market: '$12B carbon management market',
+    tags: ['#CleanTech', '#ESG', '#Enterprise'],
+  },
+];
+ 
+export const FEATURES_DATA = [
+  { id: 'ai', icon: '🧠', title: 'Real AI Generation', desc: 'Frontier AI generates unique, validated startup ideas based on your inputs.',
+    body: 'Our core engine uses frontier LLMs to generate startup ideas grounded in real market data, emerging trends, and proven business models. Every idea is unique — no templates, no repetition.',
+    list: ['Contextual generation based on your inputs', 'Market-aware suggestions using live signals', 'Unique ideas — zero pre-written content', 'Complete blueprint in seconds'] },
+  { id: 'analytics', icon: '📊', title: 'Market Analytics', desc: 'Real-time market sizing, competition mapping, and opportunity scoring.',
+    body: 'Validate your concept before you spend a rupee. Our analytics engine pulls real-time market data and competitive intelligence to score your idea.',
+    list: ['TAM/SAM/SOM estimation', 'Competitor landscape mapping', 'VC funding activity in your sector', 'Growth rate and trend signals'] },
+  { id: 'blueprint', icon: '🗺️', title: 'Business Blueprint', desc: 'Complete go-to-market strategy, revenue model, and MVP roadmap.',
+    body: 'Every idea comes with a complete execution roadmap — from MVP features to go-to-market strategy and investor pitch.',
+    list: ['90-day MVP launch plan', 'Go-to-market strategy', 'Revenue model breakdown', 'Key metrics and KPIs to track'] },
+  { id: 'collab', icon: '🤝', title: 'Collaboration', desc: 'Share ideas, comment, vote, and build with your co-founders.',
+    body: 'Build with your team. Share ideas in real-time, leave comments, vote on concepts, and assign tasks within Hema AI.',
+    list: ['Real-time idea sharing', 'Comment and feedback threads', 'Voting and prioritization', 'Role-based access control'] },
+  { id: 'vault', icon: '☁️', title: 'Idea Vault', desc: 'Save, organize, and export all your ideas in multiple formats.',
+    body: 'Never lose a great idea. Save unlimited concepts, organize by project, and export to your favourite tools.',
+    list: ['Unlimited storage (Pro+)', 'Tags and collections', 'Export to PDF, Notion, Google Docs', 'Version history and change tracking'] },
+  { id: 'pitch', icon: '🎯', title: 'Pitch Deck AI', desc: 'Auto-generate investor-ready pitch decks from your startup idea.',
+    body: 'Turn your startup idea into a compelling investor presentation in under 5 minutes.',
+    list: ['10-slide investor deck', 'AI-written slide content', 'Market size and traction visuals', 'Editable in Google Slides / PowerPoint'] },
+  { id: 'trend', icon: '🔥', title: 'Trend Radar', desc: 'Daily trending sectors, VC funding news, and market signals.',
+    body: 'Stay ahead of the curve with daily trend signals — know which sectors VCs are funding and where the next big opportunity lies.',
+    list: ['Daily trending sector reports', 'VC funding activity alerts', 'Policy and regulation tracker', 'Emerging technology signals'] },
+  { id: 'lang', icon: '🌐', title: 'Multi-language', desc: 'Generate ideas in Tamil, Hindi, English and 50+ languages.',
+    body: 'Ideate in your native language. Hema AI supports idea generation and navigation in 50+ languages including Tamil, Hindi, and Telugu.',
+    list: ['Generate ideas in Tamil/Hindi/English', 'Platform UI in 12 languages', 'Localized market insights', 'Voice input in regional languages (coming soon)'] },
+  { id: 'score', icon: '⭐', title: 'AI Idea Scoring', desc: 'Every idea is scored for market fit, feasibility, and uniqueness.',
+    body: 'Every generated idea gets a multi-dimensional AI score so you know exactly which opportunities to prioritize.',
+    list: ['Market fit score (0–100)', 'Feasibility assessment', 'Uniqueness rating vs competitors', 'Improvement suggestions'] },
+];
+ 
+export const TEAM = [
+  { name: 'Alex Chen', role: 'CEO & Founder', emoji: '👨‍💼', bio: 'Ex-Google. Built 3 startups, 2 exits.' },
+  { name: 'Riya Sharma', role: 'CTO', emoji: '👩‍💻', bio: 'AI researcher, ex-DeepMind.' },
+  { name: 'Sam Wilson', role: 'Lead Developer', emoji: '👨‍🔧', bio: 'Full-stack architect with 10y exp.' },
+  { name: 'Emma Lee', role: 'Product Designer', emoji: '👩‍🎨', bio: 'Award-winning UX from Apple.' },
+];
+ 
+export const BIZ_PLAN_SECTIONS = [
+  { key: 'problem', icon: '⚠️', color: 'rgba(255,107,157,.15)', title: 'Problem Statement', sub: 'The core pain point' },
+  { key: 'solution', icon: '✅', color: 'rgba(0,245,200,.15)', title: 'Our Solution', sub: 'How we solve it' },
+  { key: 'market', icon: '🌍', color: 'rgba(124,92,252,.15)', title: 'Market Analysis', sub: 'Size & opportunity' },
+  { key: 'competitors', icon: '⚔️', color: 'rgba(255,209,102,.15)', title: 'Competitive Landscape', sub: 'Who we compete with' },
+  { key: 'revenue', icon: '💰', color: 'rgba(78,168,222,.15)', title: 'Revenue Model', sub: 'How we make money' },
+  { key: 'growth', icon: '🚀', color: 'rgba(124,92,252,.15)', title: 'Growth Strategy', sub: 'How we scale' },
+];
+ 
+export const PLAN_PRICES = {
+  Starter: { monthly: 'Free', after: 'Free forever', amount: '$0' },
+  Pro: { monthly: '$19', after: '$19 / month', amount: '$19' },
+  Enterprise: { monthly: 'Custom', after: 'Custom Quote', amount: 'Custom' },
+};
+ 

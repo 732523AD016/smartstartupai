@@ -1,0 +1,171 @@
+/* ── nav ── extracted from HTML `nav { … }` block */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 3rem;
+  transition: background 0.3s, border-color 0.3s, padding 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+/* scrolled state adds the HTML blur backdrop */
+.scrolled {
+  background: rgba(4, 4, 12, 0.85);
+  backdrop-filter: blur(24px);
+  border-bottom-color: var(--border);
+  padding: 1rem 3rem;
+}
+
+/* ── .nav-logo ── */
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+  cursor: none;
+}
+
+/* ── .nav-links ── */
+.links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+/* ── .nav-links a ── */
+.link {
+  color: var(--muted2);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.2s;
+}
+
+.link:hover,
+.active {
+  color: var(--accent);
+}
+
+.link:hover::after,
+.active::after {
+  width: 100%;
+}
+
+/* ── .nav-actions ── */
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+/* ── .btn-ghost ── */
+.btnGhost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted2);
+  padding: 0.55rem 1.2rem;
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: none;
+  transition: all 0.2s;
+}
+.btnGhost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── .btn-nav ── */
+.btnNav {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btnNav:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ── hamburger (mobile) ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: none;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--muted2);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.hamburger .barOpen:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+.hamburger .barOpen:nth-child(2) { opacity: 0; }
+.hamburger .barOpen:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+/* ── mobile menu ── */
+.mobileMenu {
+  position: fixed;
+  top: 58px; left: 0; right: 0;
+  z-index: 599;
+  background: rgba(4, 4, 12, 0.98);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mobileLink {
+  color: var(--muted2);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.mobileLink:hover { color: var(--accent); }
+
+/* ── responsive ── matches HTML @media(max-width:900px) nav rule ── */
+@media (max-width: 900px) {
+  .nav     { padding: 1rem 1.5rem; }
+  .links   { display: none; }
+  .actions { display: none; }
+  .hamburger { display: flex; }
+}

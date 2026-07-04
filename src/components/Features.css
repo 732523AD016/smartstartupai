@@ -1,0 +1,188 @@
+/* ── #features ── */
+.section {
+  min-height: 100vh;
+  padding: 7rem 2rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.header     { margin-bottom: 2.5rem; }
+
+/* ── .section-eyebrow ── */
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+/* ── .section-h ── */
+.sectionH {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+/* ── .section-sub ── */
+.sectionSub {
+  color: var(--muted2);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-top: 0.5rem;
+  max-width: 500px;
+}
+
+/* ── .feat-grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+/* ── .feat-box ── */
+.featBox {
+  background: var(--card);
+  padding: 2.2rem;
+  cursor: none;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.featBox:hover { background: var(--card2); }
+
+/* ── .feat-box::after  (bottom gradient line on hover) ── */
+.hoverLine {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  transform-origin: left;
+}
+.featBox:hover .hoverLine { transform: scaleX(1); }
+
+/* ── .fb-icon ── */
+.fbIcon  { font-size: 2rem; margin-bottom: 1rem; }
+
+/* ── .fb-title ── */
+.fbTitle { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+/* ── .fb-desc ── */
+.fbDesc  { font-size: 0.8rem; color: var(--muted2); line-height: 1.6; }
+
+/* ────────────────────────────────────────────────────────────
+   Modal  →  HTML .modal-overlay + .modal-box
+──────────────────────────────────────────────────────────── */
+
+/* ── .modal-overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 4, 12, 0.92);
+  backdrop-filter: blur(16px);
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* ── .modal-box ── */
+.modalBox {
+  background: var(--card);
+  border: 1.5px solid var(--border2);
+  border-radius: 18px;
+  max-width: 580px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 3rem;
+  position: relative;
+}
+
+/* ── .modal-close ── */
+.modalClose {
+  position: absolute;
+  top: 1.5rem; right: 1.5rem;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  color: var(--muted2);
+  cursor: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.modalClose:hover {
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+
+/* ── .modal-big-icon ── */
+.modalIcon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+/* ── .modal-title ── */
+.modalTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 2rem;
+  font-style: italic;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+/* ── .modal-body ── */
+.modalBody {
+  font-size: 0.92rem;
+  color: var(--muted2);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+}
+
+/* ── .modal-list ── */
+.modalList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ── .ml-item  (HTML .ml-item::before → '→') ── */
+.mlItem {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--muted2);
+}
+.mlItem::before {
+  content: '→';
+  color: var(--accent3);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── responsive ── matches HTML @media(max-width:900px) feat-grid rule ── */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+}

@@ -1,43 +1,1264 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Hema AI – Smart Startup Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;700;800&family=Space+Mono&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+/* ── CSS Variables ── */
+:root{
+  --bg:#04040c;--bg2:#08081a;--surface:#0d0d20;
+  --card:#11112a;--card2:#16163a;
+  --border:#1e1e40;--border2:#2a2a55;
+  --accent:#7c5cfc;--accent2:#ff6b9d;--accent3:#00f5c8;
+  --gold:#ffd166;--text:#e8e8f8;--muted:#6060a0;--muted2:#9090c0;
+  --glow:rgba(124,92,252,.25);--glow2:rgba(255,107,157,.2);
+  --serif:'Instrument Serif',serif;
+  --sans:'Syne',sans-serif;
+  --mono:'Space Mono',monospace;
+}
+/* ── Reset ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+::selection{background:rgba(124,92,252,.3);color:var(--text)}
+a{text-decoration:none;color:inherit}
+button{cursor:none;font-family:var(--sans)}
+input,textarea{font-family:var(--sans)}
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+/* ── Background ── */
+#cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(124,92,252,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(124,92,252,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,252,.04) 1px,transparent 1px);background-size:50px 50px;z-index:0;pointer-events:none}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbF 12s ease-in-out infinite}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,252,.18),transparent 70%);top:-200px;left:-200px}
+.o2{width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,157,.12),transparent 70%);top:50%;right:-150px;animation-delay:-4s}
+.o3{width:400px;height:400px;background:radial-gradient(circle,rgba(0,245,200,.1),transparent 70%);bottom:-100px;left:30%;animation-delay:-8s}
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+/* ── Keyframes ── */
+@keyframes orbF{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,20px) scale(.95)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes spinR{to{transform:rotate(360deg)}}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes barGrow{from{width:0}to{width:var(--w,0%)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+/* ── Nav ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(4,4,12,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--serif);font-style:italic;font-size:1.6rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-link{color:var(--muted2);font-size:.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:none;transition:color .2s}
+.nav-link:hover,.nav-link.active{color:var(--accent)}
+.nav-actions{display:flex;gap:.8rem;align-items:center}
+
+/* ── Buttons ── */
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:1rem 2.5rem;border-radius:8px;font-weight:800;font-size:.9rem;letter-spacing:1.5px;text-transform:uppercase;cursor:none;transition:all .2s;box-shadow:0 0 30px var(--glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px var(--glow)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border2);color:var(--muted2);padding:.85rem 2rem;border-radius:8px;font-weight:700;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;cursor:none;transition:all .2s}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:.6rem 1.4rem;font-size:.78rem}
+
+/* ── Page wrapper ── */
+.page-wrap{position:relative;z-index:1;animation:pageIn .4s ease}
+
+/* ── Sections ── */
+section{position:relative;z-index:1}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
+.footer-logo{font-family:var(--serif);font-style:italic;font-size:1.3rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer-copy{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+
+/* ── Toast ── */
+.toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:900;display:flex;flex-direction:column;gap:.6rem}
+.toast{background:var(--card);border-radius:10px;padding:.9rem 1.5rem;font-size:.84rem;font-weight:700;display:flex;align-items:center;gap:.8rem;box-shadow:0 8px 30px rgba(0,0,0,.5);min-width:260px;animation:toastIn .35s ease both}
+.toast-success{border:1.5px solid rgba(0,245,200,.3);color:var(--accent3)}
+.toast-error{border:1.5px solid rgba(255,107,157,.3);color:var(--accent2)}
+.toast-info{border:1.5px solid rgba(124,92,252,.3);color:var(--accent)}
+
+/* ── Eyebrow / Section heading ── */
+.eyebrow{font-family:var(--mono);font-size:.68rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:.8rem}
+.section-h{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-style:italic;line-height:1.1;letter-spacing:-1px}
+.section-sub{color:var(--muted2);font-size:.95rem;line-height:1.8;margin-top:.5rem;max-width:500px}
+
+/* ── Hero ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 2rem 4rem;text-align:center}
+.chip{display:inline-flex;align-items:center;gap:.5rem;background:rgba(124,92,252,.1);border:1px solid rgba(124,92,252,.3);color:var(--accent);padding:.35rem 1rem;border-radius:100px;font-family:var(--mono);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:2rem;animation:fadeDown .7s ease both}
+.chip-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 1.5s infinite;flex-shrink:0}
+.hero-h1{font-family:var(--serif);font-size:clamp(3rem,10vw,7rem);line-height:.95;letter-spacing:-2px;margin-bottom:.8rem;animation:fadeUp .8s .1s ease both}
+.grad{font-style:italic;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-h2{font-weight:800;font-size:clamp(1.5rem,4vw,3rem);letter-spacing:6px;text-transform:uppercase;color:var(--muted2);margin-bottom:2rem;animation:fadeUp .8s .15s ease both}
+.hero-sub{max-width:560px;color:var(--muted2);font-size:1.05rem;line-height:1.8;margin:0 auto 3.5rem;animation:fadeUp .8s .2s ease both}
+.hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .3s ease both}
+.hero-stats{display:flex;gap:5rem;margin-top:6rem;padding-top:3rem;border-top:1px solid var(--border);flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .5s ease both}
+.stat-n{font-family:var(--serif);font-size:2.8rem;font-style:italic;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+.scroll-ind{margin-top:4rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--muted);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;animation:fadeUp .8s .8s ease both}
+.scroll-line{width:1px;height:40px;background:linear-gradient(var(--accent),transparent);animation:blink 2s infinite}
+
+/* ── Generator ── */
+.gen-section{max-width:900px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.step-bar{display:flex;align-items:center;justify-content:center;margin-bottom:3rem;gap:0}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;max-width:120px}
+.step-circle{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;background:var(--card);border:2px solid var(--border2);color:var(--muted);transition:all .4s}
+.step-circle.active{border-color:var(--accent);color:var(--accent);box-shadow:0 0 20px var(--glow)}
+.step-circle.done{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.step-label{font-family:var(--mono);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.step-label.active{color:var(--accent)}
+.step-conn{flex:1;height:2px;max-width:80px;background:var(--border);transition:background .4s}
+.step-conn.done{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* Industry grid */
+.ind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.8rem;margin-bottom:2rem}
+.ind-tile{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:1.2rem;text-align:center;cursor:none;transition:all .25s}
+.ind-tile:hover{border-color:var(--border2);transform:translateY(-2px)}
+.ind-tile.sel{background:rgba(124,92,252,.1);border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 30px var(--glow)}
+.ind-emoji{font-size:2rem;margin-bottom:.5rem}
+.ind-label{font-size:.78rem;font-weight:700;color:var(--muted2)}
+.ind-tile.sel .ind-label{color:var(--accent)}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:2rem}
+.chip-feat{padding:.55rem 1.1rem;border-radius:100px;border:1.5px solid var(--border2);background:var(--card);color:var(--muted2);font-size:.82rem;font-weight:700;cursor:none;transition:all .2s;user-select:none}
+.chip-feat:hover{border-color:var(--accent);color:var(--accent)}
+.chip-feat.sel{background:rgba(124,92,252,.12);border-color:var(--accent);color:var(--accent);box-shadow:0 0 12px var(--glow)}
+
+/* Audience */
+.aud-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem;margin-bottom:2rem}
+.aud-card{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:1.5rem 1rem;text-align:center;cursor:none;transition:all .25s}
+.aud-card.sel{background:rgba(255,107,157,.08);border-color:var(--accent2);box-shadow:0 8px 30px var(--glow2)}
+.aud-icon{font-size:1.8rem;margin-bottom:.5rem}
+.aud-name{font-size:.85rem;font-weight:800;margin-bottom:.2rem}
+.aud-card.sel .aud-name{color:var(--accent2)}
+.aud-desc{font-size:.72rem;color:var(--muted)}
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem}
+
+/* Spinner */
+.spinner-wrap{text-align:center;padding:4rem 2rem}
+.spinner{width:80px;height:80px;position:relative;margin:0 auto 2rem}
+.ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;animation:spinR 2s linear infinite}
+.ring:nth-child(1){border-top-color:var(--accent);animation-duration:1.5s}
+.ring:nth-child(2){border-right-color:var(--accent2);animation-duration:2s;animation-direction:reverse}
+.ring:nth-child(3){border-bottom-color:var(--accent3);animation-duration:2.5s;inset:8px}
+.spin-status{font-family:var(--mono);font-size:.78rem;color:var(--muted2);letter-spacing:2px}
+
+/* Idea result card */
+.idea-card{background:linear-gradient(135deg,rgba(124,92,252,.08),rgba(255,107,157,.05));border:1.5px solid rgba(124,92,252,.3);border-radius:16px;padding:2.5rem;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(124,92,252,.12);animation:scaleIn .5s ease}
+.idea-card::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent)}
+.idea-badge{display:inline-block;background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3);color:var(--accent);padding:.3rem .9rem;border-radius:100px;font-family:var(--mono);font-size:.65rem;letter-spacing:2px;margin-bottom:1.2rem}
+.idea-name{font-family:var(--serif);font-size:2.5rem;font-style:italic;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.idea-tagline{color:var(--muted2);font-size:1rem;line-height:1.7;margin-bottom:1rem}
+.idea-desc{color:var(--muted2);font-size:.9rem;line-height:1.8;margin-bottom:1.8rem}
+.scores{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.score-pill{flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem}
+.score-label{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.score-track{height:4px;background:var(--border2);border-radius:2px;overflow:hidden;margin-bottom:.4rem}
+.score-bar{height:100%;border-radius:2px;width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.score-val{font-weight:800;font-size:.9rem}
+.idea-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.8rem}
+.itag{padding:.22rem .65rem;border-radius:100px;background:rgba(0,245,200,.06);border:1px solid rgba(0,245,200,.2);color:var(--accent3);font-size:.65rem;font-family:var(--mono)}
+.idea-actions{display:flex;gap:.8rem;flex-wrap:wrap}
+.btn-regen{background:transparent;border:1.5px solid rgba(255,107,157,.3);color:var(--accent2);padding:.7rem 1.5rem;border-radius:8px;font-weight:700;font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;cursor:none;transition:all .2s}
+.btn-regen:hover{background:rgba(255,107,157,.08);border-color:var(--accent2)}
+
+/* Business plan accordion */
+.bizplan-section{max-width:900px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.acc-item{background:var(--card);border:1.5px solid var(--border);border-radius:12px;margin-bottom:1rem;overflow:hidden;transition:border-color .3s}
+.acc-item.open{border-color:var(--accent)}
+.acc-header{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.8rem;cursor:none}
+.acc-left{display:flex;align-items:center;gap:1rem}
+.acc-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.acc-title{font-weight:800;font-size:.95rem}
+.acc-sub{font-size:.78rem;color:var(--muted2);margin-top:.2rem}
+.acc-chev{color:var(--muted);transition:transform .3s;font-size:.9rem}
+.acc-item.open .acc-chev{transform:rotate(180deg);color:var(--accent)}
+.acc-body{padding:0 1.8rem 1.5rem;font-size:.9rem;color:var(--muted2);line-height:1.8;border-top:1px solid var(--border);animation:slideUp .3s ease}
+
+/* AI Features grid */
+.aifeat-section{max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.aifeat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;margin-top:2rem}
+.aifeat-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:2rem;transition:all .3s}
+.aifeat-card:hover{transform:translateY(-6px);border-color:var(--accent)}
+.afc-icon{font-size:2.5rem;margin-bottom:1.2rem;display:block}
+.afc-title{font-weight:800;font-size:1rem;margin-bottom:.5rem}
+.afc-desc{font-size:.82rem;color:var(--muted2);line-height:1.6;margin-bottom:1.2rem}
+.afc-tag{display:inline-block;padding:.2rem .6rem;border-radius:100px;font-family:var(--mono);font-size:.62rem;background:rgba(124,92,252,.1);border:1px solid rgba(124,92,252,.2);color:var(--accent)}
+
+/* Dashboard */
+.dash-section{max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.dash-grid{display:grid;grid-template-columns:260px 1fr;gap:2rem;margin-top:2rem}
+.dash-sidebar{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;height:fit-content;position:sticky;top:80px}
+.dash-nav-item{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;border-radius:8px;cursor:none;font-size:.85rem;font-weight:700;color:var(--muted2);transition:all .2s;margin-bottom:.3rem}
+.dash-nav-item:hover{background:rgba(124,92,252,.06);color:var(--text)}
+.dash-nav-item.active{background:rgba(124,92,252,.12);color:var(--accent);border:1px solid rgba(124,92,252,.2)}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.dash-stat{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:1.5rem}
+.dash-stat-n{font-family:var(--serif);font-size:2.2rem;font-style:italic;color:var(--accent)}
+.dash-stat-l{font-size:.75rem;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;margin-top:.3rem}
+.search-input{width:100%;background:var(--card);border:1.5px solid var(--border2);border-radius:8px;padding:.75rem 1.2rem;color:var(--text);font-size:.88rem;outline:none;margin-bottom:1.5rem;transition:border-color .2s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--muted)}
+.idea-row{background:var(--card);border:1.5px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.5rem;margin-bottom:.7rem;transition:all .2s}
+.idea-row:hover{border-color:var(--border2);background:var(--card2)}
+.idea-row-num{font-family:var(--mono);font-size:.65rem;color:var(--muted);min-width:2rem}
+.idea-row-info{flex:1}
+.idea-row-name{font-weight:800;font-size:.92rem;margin-bottom:.2rem}
+.idea-row-meta{font-size:.75rem;color:var(--muted2)}
+.idea-row-actions{display:flex;gap:.5rem}
+.icon-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--border2);background:transparent;cursor:none;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--muted2)}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tl-item{display:flex;gap:1rem;margin-bottom:1.2rem;align-items:flex-start}
+.tl-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.tl-title{font-size:.88rem;font-weight:700;margin-bottom:.2rem}
+.tl-time{font-family:var(--mono);font-size:.65rem;color:var(--muted)}
+
+/* Trending */
+.trend-section{max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.trend-layout{display:grid;grid-template-columns:1fr 380px;gap:2rem;margin-top:2rem;align-items:start}
+.trend-feed{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1.5px solid var(--border);border-radius:14px;overflow:hidden}
+.trend-row{background:var(--card);display:flex;align-items:center;gap:1.2rem;padding:1.3rem 1.8rem;cursor:none;transition:all .2s;border-left:3px solid transparent}
+.trend-row:hover{background:var(--card2)}
+.trend-row.active{border-left-color:var(--accent);background:rgba(124,92,252,.05)}
+.trend-rank{font-family:var(--mono);font-size:.65rem;color:var(--muted);min-width:2rem}
+.trend-info{flex:1}
+.trend-name{font-weight:800;font-size:.92rem;margin-bottom:.2rem}
+.trend-sub{font-size:.75rem;color:var(--muted2)}
+.trend-badge{padding:.2rem .6rem;border-radius:100px;font-family:var(--mono);font-size:.62rem;border:1px solid var(--border2);color:var(--muted2);white-space:nowrap}
+.trend-badge.hot{border-color:rgba(255,209,102,.3);color:var(--gold)}
+.trend-panel{background:var(--card);border:1.5px solid var(--border2);border-radius:14px;padding:2rem;position:sticky;top:80px;min-height:300px;transition:all .3s}
+.panel-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.85rem}
+.panel-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.panel-name{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--accent);margin-bottom:.5rem}
+.panel-tagline{color:var(--muted2);font-size:.85rem;line-height:1.7;margin-bottom:1.5rem}
+.panel-sec{margin-bottom:1.1rem}
+.panel-sec-label{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.panel-sec-val{font-size:.87rem;color:var(--text);line-height:1.6}
+.panel-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.ptag{padding:.22rem .65rem;border-radius:100px;background:rgba(0,245,200,.06);border:1px solid rgba(0,245,200,.2);color:var(--accent3);font-size:.65rem;font-family:var(--mono)}
+.panel-btn{width:100%;margin-top:1.5rem;padding:.9rem;border-radius:8px;border:1.5px solid rgba(124,92,252,.3);background:rgba(124,92,252,.08);color:var(--accent);font-weight:800;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .2s}
+.panel-btn:hover{background:rgba(124,92,252,.15);border-color:var(--accent)}
+
+/* Features grid */
+.feat-section{max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-top:2rem}
+.feat-box{background:var(--card);padding:2.2rem;cursor:none;transition:background .2s;position:relative}
+.feat-box:hover{background:var(--card2)}
+.feat-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.feat-box:hover::after{transform:scaleX(1)}
+.fb-icon{font-size:2rem;margin-bottom:1rem}
+.fb-title{font-weight:800;font-size:.95rem;margin-bottom:.5rem}
+.fb-desc{font-size:.8rem;color:var(--muted2);line-height:1.6}
+
+/* Feature modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(4,4,12,.92);backdrop-filter:blur(16px);z-index:800;display:flex;align-items:center;justify-content:center;padding:2rem;animation:scaleIn .2s ease}
+.modal-box{background:var(--card);border:1.5px solid var(--border2);border-radius:18px;max-width:580px;width:100%;max-height:85vh;overflow-y:auto;padding:3rem;position:relative;animation:scaleIn .35s ease}
+.modal-close{position:absolute;top:1.5rem;right:1.5rem;width:36px;height:36px;border-radius:50%;background:var(--card2);border:1px solid var(--border2);color:var(--muted2);cursor:none;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{border-color:var(--accent2);color:var(--accent2)}
+.modal-icon{font-size:3.5rem;display:block;margin-bottom:1.5rem}
+.modal-title{font-family:var(--serif);font-size:2rem;font-style:italic;color:var(--accent);margin-bottom:1rem}
+.modal-body{font-size:.92rem;color:var(--muted2);line-height:1.9;margin-bottom:1.5rem}
+.modal-list{display:flex;flex-direction:column;gap:.6rem}
+.ml-item{display:flex;align-items:center;gap:.8rem;font-size:.85rem;color:var(--muted2)}
+.ml-item::before{content:'→';color:var(--accent3);font-weight:700;flex-shrink:0}
+
+/* Auth */
+.auth-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:8rem 2rem}
+.auth-card{background:var(--card);border:1.5px solid var(--border2);border-radius:20px;width:100%;max-width:440px;padding:3rem;box-shadow:0 0 80px rgba(124,92,252,.12)}
+.auth-logo{font-family:var(--serif);font-style:italic;font-size:2rem;text-align:center;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2rem}
+.auth-tabs{display:flex;background:var(--card2);border-radius:8px;padding:.3rem;margin-bottom:2rem}
+.auth-tab{flex:1;padding:.65rem;border-radius:6px;text-align:center;font-size:.82rem;font-weight:800;cursor:none;transition:all .2s;color:var(--muted2);border:none;background:transparent;letter-spacing:1px}
+.auth-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.form-group{margin-bottom:1.2rem}
+.form-label{display:block;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);font-family:var(--mono);margin-bottom:.5rem}
+.form-input{width:100%;background:var(--bg2);border:1.5px solid var(--border2);border-radius:8px;padding:.9rem 1.1rem;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--muted)}
+.btn-auth{width:100%;padding:1rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:8px;font-weight:800;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;cursor:none;margin-top:1rem;transition:all .2s;box-shadow:0 4px 20px var(--glow)}
+.btn-auth:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--glow)}
+.auth-divider{text-align:center;color:var(--muted);font-size:.78rem;margin:1.5rem 0;position:relative}
+.auth-divider::before,.auth-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+.auth-divider::before{left:0}
+.auth-divider::after{right:0}
+.social-btn{width:100%;padding:.85rem;background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-weight:700;font-size:.85rem;cursor:none;display:flex;align-items:center;justify-content:center;gap:.7rem;transition:all .2s}
+.social-btn:hover{background:var(--bg2)}
+
+/* Pricing */
+.price-section{max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.trial-banner{background:linear-gradient(135deg,rgba(124,92,252,.1),rgba(255,107,157,.06));border:1.5px solid rgba(124,92,252,.25);border-radius:14px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;margin-bottom:3rem;flex-wrap:wrap}
+.tbb-badge{font-family:var(--mono);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.tbb-h{font-family:var(--serif);font-size:2.2rem;font-style:italic;margin-bottom:.3rem}
+.tbb-p{color:var(--muted2);font-size:.9rem}
+.cd-boxes{display:flex;gap:.8rem}
+.cd-box{background:var(--card);border:1.5px solid var(--border2);border-radius:10px;padding:.8rem 1.2rem;text-align:center;min-width:65px}
+.cd-n{font-family:var(--serif);font-size:2rem;font-style:italic;color:var(--accent);display:block;line-height:1}
+.cd-l{font-family:var(--mono);font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.pricing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.pricing-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:2.5rem 2rem;position:relative;transition:transform .3s,border-color .3s}
+.pricing-card:hover{transform:translateY(-5px)}
+.pricing-card.popular{border-color:var(--accent);box-shadow:0 0 50px rgba(124,92,252,.12)}
+.pop-label{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:.28rem 1rem;border-radius:100px;font-size:.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);white-space:nowrap}
+.pc-tier{font-family:var(--mono);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);margin-bottom:1rem}
+.pc-price{font-family:var(--serif);font-size:3.2rem;font-style:italic;margin-bottom:.3rem}
+.pc-period{font-size:.9rem;color:var(--muted2)}
+.pc-chip{display:inline-block;padding:.3rem .8rem;background:rgba(124,92,252,.1);border:1px solid rgba(124,92,252,.25);border-radius:100px;font-family:var(--mono);font-size:.62rem;color:var(--accent);margin-bottom:1.5rem}
+.pc-divider{height:1px;background:var(--border);margin:1.5rem 0}
+.pc-features{list-style:none;margin-bottom:2rem}
+.pc-features li{display:flex;align-items:center;gap:.7rem;padding:.5rem 0;font-size:.84rem;color:var(--muted2);border-bottom:1px solid var(--border)}
+.pc-features li:last-child{border-bottom:none}
+.ck{color:var(--accent3);font-size:.8rem;font-weight:700}
+.xx{color:var(--muted);font-size:.8rem}
+.pc-btn{width:100%;padding:.9rem;border-radius:8px;font-weight:800;font-size:.82rem;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .2s}
+.pc-btn.outline{background:transparent;border:1.5px solid var(--border2);color:var(--muted2)}
+.pc-btn.outline:hover{border-color:var(--accent);color:var(--accent)}
+.pc-btn.fill{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;box-shadow:0 4px 20px var(--glow)}
+.pc-btn.fill:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--glow)}
+
+/* Contact */
+.contact-section{max-width:900px;margin:0 auto;padding:7rem 2rem 4rem;min-height:100vh}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:2rem}
+.amount-preview{background:var(--card);border:1.5px solid var(--border2);border-radius:12px;padding:1.8rem}
+.amount-row{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid var(--border);font-size:.88rem;color:var(--muted2)}
+.amount-row:last-child{border-bottom:none;color:var(--text);font-weight:800}
+.amount-val{font-family:var(--mono);color:var(--accent)}
+.amount-green{color:var(--accent3)!important}
+.plan-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.5rem}
+.plan-opt{background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:.8rem;text-align:center;cursor:none;transition:all .2s}
+.plan-opt.sel{border-color:var(--accent);background:rgba(124,92,252,.1)}
+.plan-opt-name{font-weight:800;font-size:.82rem}
+.plan-opt-price{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-top:.2rem}
+.plan-opt.sel .plan-opt-price{color:var(--accent)}
+.btn-submit{width:100%;padding:1.1rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:8px;font-weight:800;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;cursor:none;margin-top:1rem;transition:all .2s;box-shadow:0 4px 20px var(--glow)}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--glow)}
+.success-card{text-align:center;padding:3rem 1rem;animation:scaleIn .4s ease}
+.success-icon{font-size:4rem;margin-bottom:1rem}
+.success-h{font-family:var(--serif);font-size:2rem;font-style:italic;color:var(--accent3);margin-bottom:.5rem}
+.success-p{color:var(--muted2);font-size:.9rem;line-height:1.7}
+
+/* Upgrade modal */
+.upgrade-modal{position:fixed;inset:0;background:rgba(4,4,12,.95);backdrop-filter:blur(20px);z-index:900;display:flex;align-items:center;justify-content:center;padding:2rem;animation:scaleIn .3s ease}
+.upgrade-box{background:var(--card);border:1.5px solid rgba(124,92,252,.4);border-radius:20px;max-width:480px;width:100%;padding:3rem;text-align:center;box-shadow:0 0 80px rgba(124,92,252,.15);animation:scaleIn .4s ease}
+.upgrade-h{font-family:var(--serif);font-size:2rem;font-style:italic;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.7rem}
+.upgrade-p{color:var(--muted2);font-size:.9rem;line-height:1.7;margin-bottom:2rem}
+
+/* Responsive */
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links,.nav-actions .btn-ghost{display:none}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-cards,.contact-layout,.dash-grid,.trend-layout{grid-template-columns:1fr}
+  .hero-stats{gap:2rem}
+  .trend-panel{position:static}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cring"></div>
+<div class="grid-bg"></div>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,createContext,useContext}=React;
+
+/* ── CONTEXT ── */
+const Ctx=createContext(null);
+const useApp=()=>useContext(Ctx);
+
+const SEED={id:1,name:'VernacularMD',tagline:'AI doctor in your native language',industry:'HealthTech',
+  audience:'B2C',description:'AI healthcare for rural India in 22 languages.',
+  problem:'Rural patients cannot describe symptoms in English.',
+  solution:'Voice AI diagnostic with triage and referrals.',
+  revenue:'₹99/consultation + hospital licensing',market:'$4.2B rural healthcare TAM',
+  growth:'ASHA worker distribution',scores:{market:85,feasibility:78,uniqueness:91},
+  tags:['#HealthTech','#NLP','#Rural'],saved:'Today',fav:true};
+
+function Provider({children}){
+  const[page,setPage]=useState('home');
+  const[savedIdeas,setSaved]=useState([SEED]);
+  const[currentIdea,setIdea]=useState(null);
+  const[currentPlan,setPlan]=useState(null);
+  const[user,setUser]=useState(null);
+  const[toasts,setToasts]=useState([]);
+  const[selPlan,setSelPlan]=useState('Pro');
+  const[showUpgrade]=useState(false);
+
+  const toast=useCallback((msg,type='info')=>{
+    const id=Date.now();
+    setToasts(p=>[...p,{id,msg,type}]);
+    setTimeout(()=>setToasts(p=>p.filter(t=>t.id!==id)),3200);
+  },[]);
+
+  const nav=useCallback(p=>{setPage(p);window.scrollTo({top:0,behavior:'smooth'});},[]);
+
+  const saveIdea=useCallback(idea=>{
+    if(savedIdeas.find(i=>i.name===idea.name))return false;
+    setSaved(p=>[{...idea,id:Date.now(),saved:new Date().toLocaleDateString(),fav:false},...p]);
+    return true;
+  },[savedIdeas]);
+
+  const toggleFav=useCallback(id=>setSaved(p=>p.map(i=>i.id===id?{...i,fav:!i.fav}:i)),[]);
+  const delIdea=useCallback(id=>setSaved(p=>p.filter(i=>i.id!==id)),[]);
+  const login=useCallback(u=>setUser(u),[]);
+  const logout=useCallback(()=>setUser(null),[]);
+
+  return(
+    <Ctx.Provider value={{page,nav,savedIdeas,saveIdea,toggleFav,delIdea,
+      currentIdea,setIdea,currentPlan,setPlan,user,login,logout,
+      toasts,toast,selPlan,setSelPlan,showUpgrade}}>
+      {children}
+      <Toasts/>
+    </Ctx.Provider>
+  );
+}
+
+/* ── CURSOR ── */
+function useCursor(){
+  useEffect(()=>{
+    const cur=document.getElementById('cursor');
+    const ring=document.getElementById('cring');
+    const mv=e=>{
+      cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+      setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},80);
+    };
+    document.addEventListener('mousemove',mv);
+    return()=>document.removeEventListener('mousemove',mv);
+  },[]);
+}
+
+/* ── TOASTS ── */
+function Toasts(){
+  const{toasts}=useApp();
+  const c={success:'var(--accent3)',error:'var(--accent2)',info:'var(--accent)'};
+  const ic={success:'✅',error:'❌',info:'💡'};
+  return(
+    <div className="toast-wrap">
+      {toasts.map(t=>(
+        <div key={t.id} className={`toast toast-${t.type}`}>
+          <span>{ic[t.type]}</span><span>{t.msg}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── NAVBAR ── */
+function Navbar(){
+  const{nav,page,user,logout}=useApp();
+  const[sc,setSc]=useState(false);
+  useEffect(()=>{const h=()=>setSc(window.scrollY>40);window.addEventListener('scroll',h);return()=>window.removeEventListener('scroll',h);},[]);
+  const links=[['Generator','generator'],['Trending','trending'],['Features','features'],['Pricing','pricing'],['Contact','contact']];
+  return(
+    <nav style={{background:sc?'rgba(4,4,12,.9)':'rgba(4,4,12,.88)',borderBottomColor:sc?'var(--border)':'var(--border)'}}>
+      <div className="nav-logo" onClick={()=>nav('home')}>Hema AI</div>
+      <ul className="nav-links">
+        {links.map(([l,id])=>(
+          <li key={id}><span className={`nav-link${page===id?' active':''}`} onClick={()=>nav(id)}>{l}</span></li>
+        ))}
+      </ul>
+      <div className="nav-actions">
+        {user
+          ?<><button className="btn-ghost btn-sm" onClick={()=>nav('dashboard')}>Dashboard</button>
+              <button className="btn-primary btn-sm" onClick={()=>{logout();nav('home')}}>Logout</button></>
+          :<><button className="btn-ghost btn-sm" onClick={()=>nav('auth')}>Login</button>
+              <button className="btn-primary btn-sm" onClick={()=>nav('generator')}>Get Started</button></>}
+      </div>
+    </nav>
+  );
+}
+
+/* ── FOOTER ── */
+function Footer(){
+  return(
+    <footer>
+      <div className="footer-logo">Hema AI</div>
+      <div className="footer-copy">© 2026 Hema AI · Smart Startup Builder · All Rights Reserved</div>
+    </footer>
+  );
+}
+
+/* ── SPINNER ── */
+function Spinner({msg=''}){
+  return(
+    <div className="spinner-wrap">
+      <div className="spinner">
+        <div className="ring"/><div className="ring"/><div className="ring"/>
+      </div>
+      {msg&&<p className="spin-status">{msg}</p>}
+    </div>
+  );
+}
+
+/* ── SCORE BAR ── */
+function ScoreBar({label,value,color}){
+  const[w,setW]=useState(0);
+  useEffect(()=>{const t=setTimeout(()=>setW(value),200);return()=>clearTimeout(t);},[value]);
+  return(
+    <div className="score-pill">
+      <div className="score-label">{label}</div>
+      <div className="score-track"><div className="score-bar" style={{width:w+'%',background:color}}/></div>
+      <div className="score-val" style={{color}}>{value}/100</div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   HOME
+══════════════════════════════════════════════════════════ */
+function Home(){
+  const{nav}=useApp();
+  return(
+    <section className="hero">
+      <div className="chip"><div className="chip-dot"/>AI Startup Intelligence Platform</div>
+      <h1 className="hero-h1">Turn your idea<br/>into a <span className="grad">startup</span></h1>
+      <p className="hero-h2">with AI</p>
+      <p className="hero-sub">Generate complete startup blueprints with AI — from idea to business plan, revenue strategy, and market analysis in minutes.</p>
+      <div className="hero-cta">
+        <button className="btn-primary" style={{fontSize:'1rem',padding:'1.1rem 2.8rem',boxShadow:'0 0 50px rgba(124,92,252,.35)'}} onClick={()=>nav('generator')}>⚡ Generate Startup Idea</button>
+        <button className="btn-ghost" onClick={()=>nav('features')}>Explore Features</button>
+      </div>
+      <div className="hero-stats">
+        {[['3,200+','Ideas Generated'],['98%','Satisfaction'],['60+','Industries'],['4.9★','User Rating']].map(([n,l])=>(
+          <div key={l}>
+            <div className="stat-n">{n}</div>
+            <div className="stat-l">{l}</div>
+          </div>
+        ))}
+      </div>
+      <div className="scroll-ind"><div className="scroll-line"/><span>scroll to explore</span></div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   GENERATOR
+══════════════════════════════════════════════════════════ */
+const INDS=[['HealthTech','🏥'],['EdTech','📚'],['FinTech','💰'],['AgriTech','🌾'],
+  ['RetailTech','🛍️'],['CleanTech','♻️'],['LegalTech','⚖️'],['HRTech','👥'],
+  ['Logistics','🚚'],['FoodTech','🍱'],['PropTech','🏠'],['SocialImpact','💡']];
+const FEATS=['🤖 AI Personalization','📊 Predictive Analytics','💬 NLP Chatbot',
+  '👁️ Computer Vision','🔊 Voice AI','🗺️ Recommendation Engine',
+  '🔒 Fraud Detection','🌐 Multi-language AI','🧬 Generative AI',
+  '📱 Edge AI','⚡ AutoML','🔍 Semantic Search'];
+const AUDS=[['B2C','👤','End consumers'],['B2B','🏢','Businesses'],
+  ['B2B2C','🔄','Hybrid model'],['Enterprise','🏛️','Large corps'],
+  ['Government','🏛️','Public sector'],['SMBs','🛍️','Small businesses']];
+const STATUSES=['Analysing market trends...','Researching competitors...','Crafting positioning...','Building revenue model...','Finalising blueprint...'];
+
+function Generator(){
+  const{nav,setIdea,saveIdea,toast}=useApp();
+  const[step,setStep]=useState(1);
+  const[ind,setInd]=useState('HealthTech');
+  const[feats,setFeats]=useState(['🤖 AI Personalization']);
+  const[aud,setAud]=useState('B2C');
+  const[loading,setLoading]=useState(false);
+  const[si,setSi]=useState(0);
+  const[idea,setLocal]=useState(null);
+
+  const toggleF=f=>setFeats(p=>p.includes(f)?p.filter(x=>x!==f):[...p,f]);
+
+  const generate=async()=>{
+    setLoading(true);setLocal(null);setSi(0);
+    const ticker=setInterval(()=>setSi(i=>(i+1)%STATUSES.length),1200);
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+          messages:[{role:'user',content:`Generate a creative AI startup idea for ${ind} industry, target: ${aud}, features: ${feats.join(', ')}.
+Reply ONLY in this exact format:
+NAME: [name]
+TAGLINE: [tagline]
+DESCRIPTION: [2-3 sentences]
+PROBLEM: [1-2 sentences]
+SOLUTION: [2-3 sentences]
+REVENUE: [model]
+MARKET: [TAM]
+GROWTH: [strategy]
+SCORE_MARKET: [0-100]
+SCORE_FEASIBILITY: [0-100]
+SCORE_UNIQUENESS: [0-100]
+TAGS: #tag1 #tag2 #tag3 #tag4`}]})});
+      const data=await res.json();
+      const text=data.content[0].text;
+      const g=k=>{const m=text.match(new RegExp(k+':\\s*([^\\n]+)'));return m?m[1].trim():''};
+      const parsed={name:g('NAME'),tagline:g('TAGLINE'),description:g('DESCRIPTION'),
+        problem:g('PROBLEM'),solution:g('SOLUTION'),revenue:g('REVENUE'),market:g('MARKET'),growth:g('GROWTH'),
+        scores:{market:parseInt(g('SCORE_MARKET'))||82,feasibility:parseInt(g('SCORE_FEASIBILITY'))||75,uniqueness:parseInt(g('SCORE_UNIQUENESS'))||88},
+        tags:g('TAGS').split(' ').filter(t=>t.startsWith('#')),industry:ind,audience:aud};
+      setLocal(parsed);setIdea(parsed);
+    }catch{
+      const demo={name:'VernacularMD',tagline:'AI doctor in your native language',
+        description:'AI healthcare assistant enabling rural patients in 22 Indian languages.',
+        problem:'Rural patients cannot communicate in English.',solution:'Voice AI with triage and referrals.',
+        revenue:'₹99/consultation + hospital licensing',market:'$4.2B rural healthcare TAM',
+        growth:'ASHA worker distribution',
+        scores:{market:85,feasibility:78,uniqueness:91},tags:['#HealthTech','#NLP','#Rural'],industry:ind,audience:aud};
+      setLocal(demo);setIdea(demo);
+    }
+    clearInterval(ticker);setLoading(false);
+  };
+
+  const go=n=>{setStep(n);if(n===4)generate();};
+
+  return(
+    <section className="gen-section">
+      <div style={{textAlign:'center',marginBottom:'3rem'}}>
+        <p className="eyebrow">// AI Idea Engine</p>
+        <h1 className="section-h">Build Your Startup</h1>
+      </div>
+
+      {/* Step bar */}
+      <div className="step-bar">
+        {[1,2,3,4].map((n,i)=>(
+          <React.Fragment key={n}>
+            <div className="step-item">
+              <div className={`step-circle${step===n?' active':n<step?' done':''}`}>{n<step?'✓':n}</div>
+              <span className={`step-label${step===n?' active':''}`}>{['Industry','Features','Audience','Generate'][n-1]}</span>
+            </div>
+            {i<3&&<div className={`step-conn${n<step?' done':''}`}/>}
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* Step 1 */}
+      {step===1&&(
+        <div style={{animation:'slideUp .4s ease'}}>
+          <p style={{fontSize:'1.2rem',fontWeight:800,color:'var(--muted2)',marginBottom:'1.5rem'}}>Select your industry</p>
+          <div className="ind-grid">
+            {INDS.map(([name,emoji])=>(
+              <div key={name} className={`ind-tile${ind===name?' sel':''}`} onClick={()=>setInd(name)}>
+                <div className="ind-emoji">{emoji}</div>
+                <div className="ind-label">{name}</div>
+              </div>
+            ))}
+          </div>
+          <div className="step-nav"><span/><button className="btn-primary" onClick={()=>setStep(2)}>Next: AI Features →</button></div>
+        </div>
+      )}
+
+      {/* Step 2 */}
+      {step===2&&(
+        <div style={{animation:'slideUp .4s ease'}}>
+          <p style={{fontSize:'1.2rem',fontWeight:800,color:'var(--muted2)',marginBottom:'1.5rem'}}>Choose AI features</p>
+          <div className="chips">
+            {FEATS.map(f=>(
+              <div key={f} className={`chip-feat${feats.includes(f)?' sel':''}`} onClick={()=>toggleF(f)}>{f}</div>
+            ))}
+          </div>
+          <div className="step-nav">
+            <button className="btn-ghost" onClick={()=>setStep(1)}>← Back</button>
+            <button className="btn-primary" onClick={()=>setStep(3)}>Next: Audience →</button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 3 */}
+      {step===3&&(
+        <div style={{animation:'slideUp .4s ease'}}>
+          <p style={{fontSize:'1.2rem',fontWeight:800,color:'var(--muted2)',marginBottom:'1.5rem'}}>Target audience?</p>
+          <div className="aud-grid">
+            {AUDS.map(([name,icon,desc])=>(
+              <div key={name} className={`aud-card${aud===name?' sel':''}`} onClick={()=>setAud(name)}>
+                <div className="aud-icon">{icon}</div>
+                <div className="aud-name">{name}</div>
+                <div className="aud-desc">{desc}</div>
+              </div>
+            ))}
+          </div>
+          <div className="step-nav">
+            <button className="btn-ghost" onClick={()=>setStep(2)}>← Back</button>
+            <button className="btn-primary" onClick={()=>go(4)}>⚡ Generate Idea</button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 4 */}
+      {step===4&&(
+        <div style={{animation:'slideUp .4s ease'}}>
+          {loading&&<Spinner msg={STATUSES[si]}/>}
+          {!loading&&idea&&(
+            <div className="idea-card">
+              <div className="idea-badge">✦ AI GENERATED · {idea.industry}</div>
+              <div className="idea-name">{idea.name}</div>
+              <div className="idea-tagline">{idea.tagline}</div>
+              <p className="idea-desc">{idea.description}</p>
+              <div className="scores">
+                <ScoreBar label="Market Fit" value={idea.scores.market} color="var(--accent)"/>
+                <ScoreBar label="Feasibility" value={idea.scores.feasibility} color="var(--accent3)"/>
+                <ScoreBar label="Uniqueness" value={idea.scores.uniqueness} color="var(--accent2)"/>
+              </div>
+              <div className="idea-tags">{idea.tags.map(t=><span key={t} className="itag">{t}</span>)}</div>
+              <div className="idea-actions">
+                <button className="btn-primary" style={{fontSize:'.8rem',padding:'.7rem 1.5rem'}} onClick={()=>nav('bizplan')}>📋 Business Plan</button>
+                <button className="btn-ghost" style={{fontSize:'.8rem',padding:'.7rem 1.5rem'}} onClick={()=>{const ok=saveIdea(idea);toast(ok?`"${idea.name}" saved!`:'Already saved!',ok?'success':'info')}}>💾 Save</button>
+                <button className="btn-regen" onClick={()=>{setStep(1);setLocal(null)}}>🔄 Regenerate</button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   BUSINESS PLAN
+══════════════════════════════════════════════════════════ */
+const BIZ_SECS=[
+  {key:'problem',icon:'⚠️',color:'rgba(255,107,157,.15)',title:'Problem Statement',sub:'Core pain point'},
+  {key:'solution',icon:'✅',color:'rgba(0,245,200,.15)',title:'Our Solution',sub:'How we solve it'},
+  {key:'market',icon:'🌍',color:'rgba(124,92,252,.15)',title:'Market Analysis',sub:'Size & opportunity'},
+  {key:'competitors',icon:'⚔️',color:'rgba(255,209,102,.15)',title:'Competitive Landscape',sub:'Who we compete with'},
+  {key:'revenue',icon:'💰',color:'rgba(78,168,222,.15)',title:'Revenue Model',sub:'How we make money'},
+  {key:'growth',icon:'🚀',color:'rgba(124,92,252,.15)',title:'Growth Strategy',sub:'How we scale'},
+];
+
+function BizPlan(){
+  const{nav,currentIdea,currentPlan,setPlan,saveIdea,toast}=useApp();
+  const[plan,setLocal]=useState(currentPlan);
+  const[loading,setLoading]=useState(!currentPlan);
+  const[openIdx,setOpen]=useState(0);
+
+  useEffect(()=>{if(!currentPlan&&currentIdea)gen();},[]);
+
+  const gen=async()=>{
+    if(!currentIdea)return;
+    setLoading(true);
+    const fallback={
+      problem:`**Core Pain:** ${currentIdea.problem}\n\nThe ${currentIdea.industry} market lacks AI-driven accessibility.`,
+      solution:`**Approach:** ${currentIdea.solution}\n\n${currentIdea.name} delivers a 10x better experience.`,
+      market:`**Opportunity:** ${currentIdea.market}\n\n- TAM: ${currentIdea.market}\n- SAM: 30% addressable in Y1-3\n- SOM: 2% by Year 3`,
+      competitors:`**Landscape:**\n\n- Direct: Legacy players with outdated tech\n- Indirect: Manual services\n- Our moat: AI-first, vernacular support`,
+      revenue:`**Revenue:** ${currentIdea.revenue}\n\n- Primary: Subscription SaaS\n- Secondary: Transaction fees\n- Tertiary: API licensing`,
+      growth:`**Playbook:** ${currentIdea.growth}\n\n- Phase 1 (0-6mo): PMF, 100 pilots\n- Phase 2 (6-18mo): 10K users\n- Phase 3 (18-36mo): Series A`,
+    };
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,
+          messages:[{role:'user',content:`Business plan for "${currentIdea.name}". Reply ONLY as valid JSON (no markdown):
+{"problem":"...","solution":"...","market":"...","competitors":"...","revenue":"...","growth":"..."}`}]})});
+      const d=await res.json();
+      const raw=d.content[0].text.replace(/```json|```/g,'').trim();
+      const parsed=JSON.parse(raw);
+      setLocal(parsed);setPlan(parsed);
+    }catch{setLocal(fallback);setPlan(fallback);}
+    setLoading(false);toast('Business plan ready!','success');
+  };
+
+  const html=s=>( s||'' ).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n- /g,'<br/>• ').replace(/\n/g,'<br/>');
+
+  return(
+    <section className="bizplan-section">
+      <p className="eyebrow">// AI Business Plan</p>
+      <h1 className="section-h">{currentIdea?.name||'Business Plan'}</h1>
+      <p className="section-sub" style={{marginBottom:0}}>Generated by AI · Click each section to expand</p>
+      {loading?<Spinner msg="Building your business plan..."/>:(
+        <>
+          <div style={{marginTop:'2rem'}}>
+            {BIZ_SECS.map((s,i)=>(
+              <div key={s.key} className={`acc-item${openIdx===i?' open':''}`}>
+                <div className="acc-header" onClick={()=>setOpen(openIdx===i?-1:i)}>
+                  <div className="acc-left">
+                    <div className="acc-icon" style={{background:s.color}}>{s.icon}</div>
+                    <div><div className="acc-title">{s.title}</div><div className="acc-sub">{s.sub}</div></div>
+                  </div>
+                  <span className="acc-chev">▼</span>
+                </div>
+                {openIdx===i&&(
+                  <div className="acc-body" dangerouslySetInnerHTML={{__html:`<p>${html(plan?.[s.key])}</p>`}}/>
+                )}
+              </div>
+            ))}
+          </div>
+          <div style={{marginTop:'2rem',display:'flex',gap:'1rem',flexWrap:'wrap'}}>
+            <button className="btn-primary" style={{fontSize:'.82rem',padding:'.8rem 1.8rem'}} onClick={()=>nav('aifeatures')}>View AI Features →</button>
+            <button className="btn-ghost" style={{fontSize:'.82rem',padding:'.8rem 1.8rem'}} onClick={()=>nav('generator')}>← Back to Generator</button>
+            <button className="btn-ghost" style={{fontSize:'.82rem',padding:'.8rem 1.8rem'}} onClick={()=>{if(currentIdea){const ok=saveIdea(currentIdea);toast(ok?'Saved!':'Already saved','success')}}}>💾 Save to Dashboard</button>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   AI FEATURES PAGE
+══════════════════════════════════════════════════════════ */
+const FEAT_DESCS={
+  '🤖 AI Personalization':'Adaptive algorithms that learn user behaviour to deliver hyper-personalised experiences, increasing retention by 40%.',
+  '📊 Predictive Analytics':'ML models that forecast market trends, user churn, and revenue opportunities before they happen.',
+  '💬 NLP Chatbot':'Natural language engine supporting multi-turn conversations in 22+ languages with contextual memory.',
+  '👁️ Computer Vision':'Real-time image recognition and analysis pipeline for visual data processing at scale.',
+  '🔊 Voice AI':'Speech recognition and synthesis supporting regional accents with <100ms latency.',
+  '🗺️ Recommendation Engine':'Collaborative and content-based filtering to surface the most relevant items per user.',
+  '🔒 Fraud Detection':'Real-time anomaly detection using ensemble models to prevent fraud with 99.2% accuracy.',
+  '🌐 Multi-language AI':'Multilingual NLP pipeline trained on regional language corpora for authentic local experiences.',
+  '🧬 Generative AI':'LLM-powered content generation for marketing copy, reports, and automated workflows.',
+  '📱 Edge AI':'On-device inference for privacy-first applications with offline capability.',
+  '⚡ AutoML':'Automated ML pipeline that continuously improves models without manual intervention.',
+  '🔍 Semantic Search':'Vector-based search understanding intent and context, not just keywords.',
+};
+
+function AIFeatures(){
+  const{nav,currentIdea}=useApp();
+  const feats=Object.entries(FEAT_DESCS);
+  return(
+    <section className="aifeat-section">
+      <p className="eyebrow">// AI Feature Stack</p>
+      <h1 className="section-h">Recommended AI Features</h1>
+      <p className="section-sub">Based on your selections — here are the AI capabilities to build</p>
+      <div className="aifeat-grid">
+        {feats.map(([f,desc],i)=>(
+          <div key={f} className="aifeat-card" style={{animation:`slideUp .4s ${i*.05}s ease both`}}>
+            <span className="afc-icon">{f.split(' ')[0]}</span>
+            <div className="afc-title">{f}</div>
+            <div className="afc-desc">{desc}</div>
+            {currentIdea&&<span className="afc-tag">{currentIdea.industry}</span>}
+          </div>
+        ))}
+      </div>
+      <div style={{marginTop:'2rem',display:'flex',gap:'1rem',flexWrap:'wrap'}}>
+        <button className="btn-primary" style={{fontSize:'.82rem',padding:'.8rem 1.8rem'}} onClick={()=>nav('dashboard')}>Go to Dashboard →</button>
+        <button className="btn-ghost" style={{fontSize:'.82rem',padding:'.8rem 1.8rem'}} onClick={()=>nav('bizplan')}>← Business Plan</button>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════════════════ */
+function Dashboard(){
+  const{nav,savedIdeas,toggleFav,delIdea,setIdea,toast}=useApp();
+  const[tab,setTab]=useState(0);
+  const[search,setSearch]=useState('');
+  const filtered=savedIdeas.filter(i=>i.name.toLowerCase().includes(search.toLowerCase()));
+  const favs=savedIdeas.filter(i=>i.fav);
+
+  const Row=({idea,i})=>(
+    <div className="idea-row">
+      <span className="idea-row-num">{String(i+1).padStart(2,'0')}</span>
+      <div className="idea-row-info">
+        <div className="idea-row-name">{idea.name}</div>
+        <div className="idea-row-meta">{idea.industry} · {idea.audience} · Saved {idea.saved}</div>
+      </div>
+      <div className="idea-row-actions">
+        <button className="icon-btn" title="Favorite" onClick={()=>{toggleFav(idea.id);toast(idea.fav?'Removed from favorites':'Added to favorites ❤️','info')}}>{idea.fav?'❤️':'🤍'}</button>
+        <button className="icon-btn" title="Load" onClick={()=>{setIdea(idea);nav('generator');toast(`${idea.name} loaded!`,'success')}}>↗</button>
+        <button className="icon-btn" title="Delete" onClick={()=>{delIdea(idea.id);toast('Idea deleted','info')}}>🗑</button>
+      </div>
+    </div>
+  );
+
+  const tabs=['💾 Saved Ideas','❤️ Favorites','🕐 Activity'];
+  return(
+    <section className="dash-section">
+      <p className="eyebrow">// Your Workspace</p>
+      <h1 className="section-h">Dashboard</h1>
+      <div className="dash-grid">
+        {/* Sidebar */}
+        <div className="dash-sidebar">
+          {tabs.map((t,i)=>(
+            <div key={t} className={`dash-nav-item${tab===i?' active':''}`} onClick={()=>setTab(i)}>{t}</div>
+          ))}
+          <div style={{marginTop:'2rem',paddingTop:'1.5rem',borderTop:'1px solid var(--border)'}}>
+            <button className="btn-primary" style={{width:'100%',padding:'.75rem',fontSize:'.82rem',marginBottom:'.6rem'}} onClick={()=>nav('generator')}>+ New Idea</button>
+            <button className="btn-ghost" style={{width:'100%',padding:'.7rem',fontSize:'.8rem'}} onClick={()=>nav('pricing')}>Upgrade Plan</button>
+          </div>
+        </div>
+        {/* Content */}
+        <div>
+          <div className="dash-stats">
+            {[[savedIdeas.length,'Ideas Saved'],[favs.length,'Favorites'],['Pro','Current Plan']].map(([n,l])=>(
+              <div key={l} className="dash-stat">
+                <div className="dash-stat-n">{n}</div>
+                <div className="dash-stat-l">{l}</div>
+              </div>
+            ))}
+          </div>
+          <input className="search-input" type="text" placeholder="Search saved ideas..." value={search} onChange={e=>setSearch(e.target.value)}/>
+
+          {tab===0&&(filtered.length===0
+            ?<div style={{textAlign:'center',padding:'3rem',color:'var(--muted)',fontSize:'.88rem'}}>
+                No saved ideas yet.
+                <div style={{marginTop:'1rem'}}><button className="btn-primary" style={{fontSize:'.82rem',padding:'.7rem 1.5rem'}} onClick={()=>nav('generator')}>Generate →</button></div>
+              </div>
+            :filtered.map((idea,i)=><Row key={idea.id} idea={idea} i={i}/>)
+          )}
+
+          {tab===1&&(favs.length===0
+            ?<div style={{textAlign:'center',padding:'3rem',color:'var(--muted)'}}>No favorites yet.</div>
+            :favs.map((idea,i)=><Row key={idea.id} idea={idea} i={i}/>)
+          )}
+
+          {tab===2&&(
+            <div>
+              {[{t:'Logged in to dashboard',c:'var(--accent)'},
+                {t:'Business plan generated',c:'var(--accent3)'},
+                {t:'Idea saved to vault',c:'var(--accent2)'},
+                ...savedIdeas.map(i=>({t:`Saved: ${i.name}`,c:'var(--accent)'}))
+              ].map((item,i)=>(
+                <div key={i} className="tl-item">
+                  <div className="tl-dot" style={{background:item.c}}/>
+                  <div>
+                    <div className="tl-title">{item.t}</div>
+                    <div className="tl-time">{i===0?'Just now':`${(i+1)*2} min ago`}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TRENDING
+══════════════════════════════════════════════════════════ */
+const TRENDS=[
+  {id:1,name:'VernacularMD',sub:'AI doctor in local language for rural India',ind:'HealthTech',hot:true,problem:'Rural patients struggle to communicate symptoms in English.',solution:'Voice AI diagnostic in 22 Indian languages with triage.',revenue:'₹99/consultation + hospital licensing',market:'$4.2B TAM India rural health',tags:['#HealthTech','#NLP','#Rural']},
+  {id:2,name:'KiranaIQ',sub:'Smart inventory AI for neighbourhood stores',ind:'RetailTech',hot:true,problem:'Kirana stores lose 30% revenue from stockout/overstock.',solution:'WhatsApp-integrated AI for demand prediction.',revenue:'SaaS ₹999/mo + supplier commission',market:'$120B kirana market India',tags:['#RetailTech','#SMB','#AI']},
+  {id:3,name:'AgriSense',sub:'Crop disease detection via smartphone',ind:'AgriTech',hot:false,problem:'Farmers lose 25% crops due to late disease detection.',solution:'Computer vision AI detecting 50+ diseases from photos.',revenue:'Freemium + insurance partnerships',market:'$8.3B precision farming India',tags:['#AgriTech','#CV','#Farmers']},
+  {id:4,name:'SkillBridge AI',sub:'Career coach for first-gen graduates',ind:'EdTech',hot:true,problem:'First-gen grads lack networks — 40% lower employment.',solution:'AI mentor for career paths and mock interviews.',revenue:'$9/mo + placement success fee',market:'$6B career coaching market',tags:['#EdTech','#Career','#AI']},
+  {id:5,name:'LegalEase',sub:'Plain-language contract AI for MSMEs',ind:'LegalTech',hot:false,problem:'MSMEs sign risky contracts blindly, losing ₹2B+ yearly.',solution:'AI flags contract risks in Tamil, Hindi, English.',revenue:'₹99/doc + monthly SaaS',market:'$3.2B SME legal market',tags:['#LegalTech','#NLP','#MSME']},
+  {id:6,name:'CarbonTrace',sub:'Supply chain carbon footprint tracker',ind:'CleanTech',hot:true,problem:'Companies cannot measure Scope 3 emissions accurately.',solution:'IoT + AI platform for supply chain carbon monitoring.',revenue:'Enterprise SaaS $2K/mo',market:'$12B carbon management market',tags:['#CleanTech','#ESG','#Enterprise']},
+];
+
+function Trending(){
+  const{nav}=useApp();
+  const[sel,setSel]=useState(null);
+  return(
+    <section className="trend-section">
+      <p className="eyebrow">// Community Feed</p>
+      <h1 className="section-h">Trending Ideas</h1>
+      <p className="section-sub">Real startup ideas generated on Hema AI — click any to explore</p>
+      <div className="trend-layout">
+        <div className="trend-feed">
+          {TRENDS.map((t,i)=>(
+            <div key={t.id} className={`trend-row${sel?.id===t.id?' active':''}`} onClick={()=>setSel(t)}>
+              <span className="trend-rank">{String(i+1).padStart(2,'0')}</span>
+              <div className="trend-info">
+                <div className="trend-name">{t.name}</div>
+                <div className="trend-sub">{t.sub}</div>
+              </div>
+              <span className={`trend-badge${t.hot?' hot':''}`}>{t.hot?'🔥 Hot':t.ind}</span>
+            </div>
+          ))}
+        </div>
+        <div className="trend-panel">
+          {!sel
+            ?<div className="panel-empty"><div style={{fontSize:'2.5rem',opacity:.3,marginBottom:'1rem'}}>🚀</div><div>Select an idea to see full details</div></div>
+            :<div key={sel.id} style={{animation:'slideUp .25s ease'}}>
+              <div className="panel-tag">✦ {sel.ind}</div>
+              <div className="panel-name">{sel.name}</div>
+              <div className="panel-tagline">{sel.sub}</div>
+              {[['Problem',sel.problem],['Solution',sel.solution],['Revenue',sel.revenue],['Market',sel.market]].map(([l,v])=>(
+                <div key={l} className="panel-sec">
+                  <div className="panel-sec-label">{l}</div>
+                  <div className="panel-sec-val">{v}</div>
+                </div>
+              ))}
+              <div className="panel-tags">{sel.tags.map(t=><span key={t} className="ptag">{t}</span>)}</div>
+              <button className="panel-btn" onClick={()=>nav('generator')}>Generate Similar →</button>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   FEATURES
+══════════════════════════════════════════════════════════ */
+const FEAT_DATA={
+  ai:{icon:'🧠',title:'Real AI Generation',body:'Frontier LLMs generate unique, market-validated ideas. Zero templates — every idea is novel.',list:['Contextual generation from your inputs','Market-aware live signals','Unique ideas guaranteed','Complete blueprint in seconds']},
+  analytics:{icon:'📊',title:'Market Analytics',body:'Validate your concept before spending a rupee. Real-time market sizing and competitive intelligence.',list:['TAM/SAM/SOM estimation','Competitor landscape mapping','VC funding activity','Growth trend signals']},
+  blueprint:{icon:'🗺️',title:'Business Blueprint',body:'Complete execution roadmap from MVP to go-to-market strategy and investor pitch.',list:['90-day MVP plan','GTM strategy','Revenue breakdown','KPI targets']},
+  collab:{icon:'🤝',title:'Collaboration',body:'Build with co-founders. Share, comment, vote, assign tasks — all within Hema AI.',list:['Real-time sharing','Comment threads','Voting & prioritization','Role-based access']},
+  vault:{icon:'☁️',title:'Idea Vault',body:'Save unlimited ideas, organize by project, export to your favourite tools.',list:['Unlimited storage (Pro+)','Tags & collections','PDF/Notion/Google Docs export','Version history']},
+  pitch:{icon:'🎯',title:'Pitch Deck AI',body:'Turn your idea into an investor presentation in 5 minutes.',list:['10-slide deck','AI-written content','Market visuals','Google Slides export']},
+  trend:{icon:'🔥',title:'Trend Radar',body:'Daily signals on hot sectors, VC funding, and emerging market opportunities.',list:['Daily trending sectors','VC activity alerts','Regulatory tracker','Tech signals']},
+  lang:{icon:'🌐',title:'Multi-language',body:'Generate ideas in Tamil, Hindi, English and 50+ languages.',list:['Tamil/Hindi/English','12 UI languages','Local market data','Voice input soon']},
+  score:{icon:'⭐',title:'AI Idea Scoring',body:'Every idea gets scored on market fit, feasibility, and uniqueness.',list:['Market fit score (0–100)','Feasibility assessment','Uniqueness vs competitors','Improvement tips']},
+};
+const FEAT_BOXES=Object.entries(FEAT_DATA).map(([key,{icon,title,body}])=>({key,icon,title,desc:body.split('.')[0]+'.'}));
+
+function Features(){
+  const[modal,setModal]=useState(null);
+  return(
+    <section className="feat-section">
+      <p className="eyebrow">// Platform Capabilities</p>
+      <h1 className="section-h">Everything to launch</h1>
+      <p className="section-sub">Click any feature card to explore what it does</p>
+      <div className="feat-grid">
+        {FEAT_BOXES.map(f=>(
+          <div key={f.key} className="feat-box" onClick={()=>setModal(f.key)}>
+            <div className="fb-icon">{f.icon}</div>
+            <div className="fb-title">{f.title}</div>
+            <div className="fb-desc">{f.desc}</div>
+          </div>
+        ))}
+      </div>
+      {modal&&(
+        <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&setModal(null)}>
+          <div className="modal-box">
+            <button className="modal-close" onClick={()=>setModal(null)}>✕</button>
+            <span className="modal-icon">{FEAT_DATA[modal].icon}</span>
+            <div className="modal-title">{FEAT_DATA[modal].title}</div>
+            <div className="modal-body">{FEAT_DATA[modal].body}</div>
+            <div className="modal-list">{FEAT_DATA[modal].list.map(l=><div key={l} className="ml-item">{l}</div>)}</div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════════════════ */
+function Auth(){
+  const{nav,login,toast}=useApp();
+  const[tab,setTab]=useState('login');
+  const[form,setForm]=useState({name:'',email:'',password:''});
+  const submit=()=>{
+    if(!form.email||!form.password){toast('Fill all fields','error');return;}
+    login({name:form.name||form.email.split('@')[0],email:form.email});
+    toast('Welcome to Hema AI! 🎉','success');
+    setTimeout(()=>nav('dashboard'),700);
+  };
+  return(
+    <section className="auth-section">
+      <div className="auth-card">
+        <div className="auth-logo">Hema AI</div>
+        <div className="auth-tabs">
+          {['login','signup'].map(t=>(
+            <button key={t} className={`auth-tab${tab===t?' active':''}`} onClick={()=>setTab(t)}>
+              {t==='login'?'Login':'Sign Up'}
+            </button>
+          ))}
+        </div>
+        {tab==='signup'&&(
+          <div className="form-group">
+            <label className="form-label">Full Name</label>
+            <input className="form-input" type="text" placeholder="Your name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/>
+          </div>
+        )}
+        <div className="form-group">
+          <label className="form-label">Email</label>
+          <input className="form-input" type="email" placeholder="you@startup.com" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/>
+        </div>
+        <div className="form-group">
+          <label className="form-label">Password</label>
+          <input className="form-input" type="password" placeholder="••••••••" value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/>
+        </div>
+        <button className="btn-auth" onClick={submit}>{tab==='login'?'Login to Dashboard':'Create Free Account'}</button>
+        <div className="auth-divider">or continue with</div>
+        <button className="social-btn" onClick={submit}>🌐 Continue with Google</button>
+        {tab==='signup'&&<p style={{textAlign:'center',fontSize:'.78rem',color:'var(--muted)',marginTop:'1rem'}}>2-month free trial · No credit card required</p>}
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   PRICING
+══════════════════════════════════════════════════════════ */
+function useCountdown(){
+  const[t,setT]=useState({d:'60',h:'00',m:'00',s:'00'});
+  useEffect(()=>{
+    const end=new Date();end.setDate(end.getDate()+60);
+    const tick=()=>{
+      const diff=end-new Date();
+      const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000);
+      const m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+      setT({d:String(d).padStart(2,'0'),h:String(h).padStart(2,'0'),m:String(m).padStart(2,'0'),s:String(s).padStart(2,'0')});
+    };
+    tick();const id=setInterval(tick,1000);return()=>clearInterval(id);
+  },[]);
+  return t;
+}
+
+const PLANS=[
+  {id:'Starter',price:'$0',period:'/ mo',trial:'Free forever',popular:false,
+    feats:[['✓','5 Ideas / month'],['✓','Basic Analytics'],['✓','Email Support'],['—','Pitch Deck AI'],['—','Team Access'],['—','Idea Vault']],
+    btn:'Start Free',fill:false},
+  {id:'Pro',price:'$19',period:'/ mo',trial:'✦ 2 months free then $19/mo',popular:true,
+    feats:[['✓','Unlimited Ideas'],['✓','Advanced Analytics'],['✓','Priority Support'],['✓','Pitch Deck AI'],['✓','500 Idea Vault'],['—','Custom Integration']],
+    btn:'Get Pro — Free Trial',fill:true},
+  {id:'Enterprise',price:'Custom',period:'',trial:'✦ 2 month pilot free',popular:false,
+    feats:[['✓','Unlimited Users'],['✓','Custom Integrations'],['✓','Dedicated Manager'],['✓','White-label'],['✓','API Access'],['✓','SLA Guarantee']],
+    btn:'Contact Sales',fill:false},
+];
+
+function Pricing(){
+  const{nav}=useApp();
+  const t=useCountdown();
+  return(
+    <section className="price-section">
+      <div style={{textAlign:'center',marginBottom:'3rem'}}>
+        <p className="eyebrow">// Simple Pricing</p>
+        <h1 className="section-h">Start free. Scale when ready.</h1>
+      </div>
+      <div className="trial-banner">
+        <div>
+          <div className="tbb-badge">✦ Limited Offer</div>
+          <h3 className="tbb-h">2 Months Free Trial</h3>
+          <p className="tbb-p">No credit card · Full access · Cancel anytime</p>
+        </div>
+        <div className="cd-boxes">
+          {[['d','Days'],['h','Hrs'],['m','Min'],['s','Sec']].map(([k,l])=>(
+            <div key={k} className="cd-box"><span className="cd-n">{t[k]}</span><span className="cd-l">{l}</span></div>
+          ))}
+        </div>
+      </div>
+      <div className="pricing-cards">
+        {PLANS.map(p=>(
+          <div key={p.id} className={`pricing-card${p.popular?' popular':''}`}>
+            {p.popular&&<div className="pop-label">Most Popular</div>}
+            <div className="pc-tier">{p.id}</div>
+            <div className="pc-price">{p.price}<span className="pc-period"> {p.period}</span></div>
+            <div className="pc-chip">{p.trial}</div>
+            <div className="pc-divider"/>
+            <ul className="pc-features">
+              {p.feats.map(([c,f])=>(
+                <li key={f}><span className={c==='✓'?'ck':'xx'}>{c}</span>{f}</li>
+              ))}
+            </ul>
+            <button className={`pc-btn ${p.fill?'fill':'outline'}`} onClick={()=>nav('contact')}>{p.btn}</button>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════════════════ */
+const PLAN_AMT={Starter:'Free',Pro:'$19 / month',Enterprise:'Custom Quote'};
+
+function Contact(){
+  const{nav,selPlan,setSelPlan,toast}=useApp();
+  const t=useCountdown();
+  const[form,setForm]=useState({name:'',email:'',company:'',message:''});
+  const[done,setDone]=useState(false);
+  const submit=()=>{
+    if(!form.name||!form.email){toast('Fill name and email','error');return;}
+    setTimeout(()=>{setDone(true);toast('Trial started! Welcome 🎉','success');},1200);
+  };
+  return(
+    <section className="contact-section">
+      <p className="eyebrow">// Get Started</p>
+      <h1 className="section-h">Start your free trial</h1>
+      <div style={{background:'linear-gradient(135deg,rgba(124,92,252,.1),rgba(255,107,157,.06))',border:'1.5px solid rgba(124,92,252,.25)',borderRadius:14,padding:'2rem 2.5rem',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'2rem',margin:'2rem 0',flexWrap:'wrap'}}>
+        <div>
+          <div style={{fontFamily:'var(--mono)',fontSize:'.65rem',color:'var(--accent)',letterSpacing:3,textTransform:'uppercase',marginBottom:'.5rem'}}>✦ 2 Months Free</div>
+          <h3 style={{fontFamily:'var(--serif)',fontSize:'1.8rem',fontStyle:'italic'}}>No credit card required</h3>
+        </div>
+        <div className="cd-boxes">
+          {[['d','Days'],['h','Hrs'],['m','Min'],['s','Sec']].map(([k,l])=>(
+            <div key={k} className="cd-box"><span className="cd-n">{t[k]}</span><span className="cd-l">{l}</span></div>
+          ))}
+        </div>
+      </div>
+      <div className="contact-layout">
+        <div>
+          <p style={{color:'var(--muted2)',lineHeight:1.9,fontSize:'.95rem',marginBottom:'2rem'}}>Choose your plan and fill the form. Our team reaches out within 24 hours. First 2 months completely free.</p>
+          <div className="amount-preview">
+            {[['Selected Plan',selPlan,false],['Trial Period','2 Months FREE',false],['After Trial',PLAN_AMT[selPlan]||'—',false],['Due Today','$0.00',true]].map(([l,v,green])=>(
+              <div key={l} className="amount-row">
+                <span>{l}</span>
+                <span className={`amount-val${green?' amount-green':''}`}>{v}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {!done?(
+          <div>
+            {[['Full Name *','text','Your name','name'],['Email *','email','you@startup.com','email'],['Company','text','Your startup','company']].map(([l,t2,ph,k])=>(
+              <div key={k} className="form-group">
+                <label className="form-label">{l}</label>
+                <input className="form-input" type={t2} placeholder={ph} value={form[k]} onChange={e=>setForm({...form,[k]:e.target.value})}/>
+              </div>
+            ))}
+            <div className="form-group">
+              <label className="form-label">Select Plan</label>
+              <div className="plan-picker">
+                {['Starter','Pro','Enterprise'].map(p=>(
+                  <div key={p} className={`plan-opt${selPlan===p?' sel':''}`} onClick={()=>setSelPlan(p)}>
+                    <div className="plan-opt-name">{p}</div>
+                    <div className="plan-opt-price">{PLAN_AMT[p]}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Message</label>
+              <textarea className="form-input" rows={3} placeholder="Tell us about your idea..." value={form.message} onChange={e=>setForm({...form,message:e.target.value})} style={{resize:'vertical'}}/>
+            </div>
+            <button className="btn-submit" onClick={submit}>✦ Start Free Trial — No Card Needed</button>
+          </div>
+        ):(
+          <div className="success-card">
+            <div className="success-icon">🎉</div>
+            <div className="success-h">You're in!</div>
+            <p className="success-p">Your 2-month free trial starts now. Our team will reach out within 24 hours.</p>
+            <button className="btn-primary" style={{marginTop:'2rem'}} onClick={()=>nav('dashboard')}>Go to Dashboard →</button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   APP ROOT
+══════════════════════════════════════════════════════════ */
+const PAGES={
+  home:Home, generator:Generator, bizplan:BizPlan,
+  aifeatures:AIFeatures, dashboard:Dashboard, trending:Trending,
+  features:Features, auth:Auth, pricing:Pricing, contact:Contact,
+};
+
+function AppInner(){
+  useCursor();
+  const{page}=useApp();
+  const Page=PAGES[page]||Home;
+  return(
+    <>
+      <Navbar/>
+      <div className="page-wrap"><Page/></div>
+      <Footer/>
+    </>
+  );
+}
+
+function App(){
+  return(
+    <Provider>
+      <AppInner/>
+    </Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
 </html>
