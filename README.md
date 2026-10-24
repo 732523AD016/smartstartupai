@@ -1,70 +1,138 @@
-# Getting Started with Create React App
+Smart Startup Builder – Hema AI 🚀
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An AI-powered full-stack web application that helps users transform startup ideas into structured business plans with AI-generated insights.
 
-## Available Scripts
+✨ Features
 
-In the project directory, you can run:
+- 🤖 **AI Startup Idea Generator** – Generate startup ideas using Google Gemini AI.
+- 📊 **Business Plan Generation** – Create structured plans with problem, solution, market, revenue, and growth details.
+- 🔐 **User Authentication** – Register and log in securely.
+- 💾 **Save Startup Ideas** – Store and manage startup plans using MongoDB.
+- 🛠️ **Full-Stack Architecture** – React frontend with Node.js and Express backend.
 
-### `npm start`
+ 🧰 Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Frontend**
+- React.js
+- JavaScript
+- HTML5 and CSS3
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Backend**
+- Node.js
+- Express.js
+- MongoDB and Mongoose
+- JWT Authentication
 
-### `npm test`
+**AI Integration**
+- Google Gemini API (`@google/genai`)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📁 Project Structure
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+smartstartupai-mern/
+├── public/
+├── src/
+│   ├── App.js
+│   └── components/
+├── backend/
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── startups.js
+│   │   └── ai.js
+│   ├── server.js
+│   └── .env.example
+├── package.json
+└── README.md
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚙️ Prerequisites
 
-### `npm run eject`
+- Node.js and npm
+- MongoDB local instance or MongoDB Atlas
+- Google Gemini API key
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. Clone the repository
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+git clone https://github.com/732523AD016/smartstartupai.git
+cd smartstartupai
 
-## Learn More
+### 2. Install frontend dependencies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+npm install
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 3. Configure the backend
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+cd backend
+npm install
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Create a `.env` file inside the `backend` directory:
 
-### Advanced Configuration
+```env
+PORT=5000
+CLIENT_URL=http://localhost:3000
+MONGODB_URI=mongodb://127.0.0.1:27017/smartstartupai
+JWT_SECRET=AQ.Ab8RN6JlbQXTV3tCnI0AMprW3EQ2IFJvkXaylfCjxIT9p6Ow0A
+GEMINI_API_KEY=AQ.Ab8RN6JlbQXTV3tCnI0AMprW3EQ2IFJvkXaylfCjxIT9p6Ow0A
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Replace the example values with your own configuration. Keep `.env` private and never upload API keys or secrets to GitHub.
 
-### Deployment
+### 4. Start the backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+From the `backend` directory, run:
 
-### `npm run build` fails to minify
+```bash
+node server.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The backend runs at `http://localhost:5000`.
+
+Health check: `http://localhost:5000/api/health`
+
+### 5. Start the frontend
+
+Open a separate terminal in the project root:
+
+```bash
+npm start
+```
+
+Open `http://localhost:3000` in your browser.
+
+## 🏗️ Production Build
+
+To create an optimized frontend build:
+
+```bash
+npm run build
+```
+
+The production files will be generated in the `build` directory.
+
+## 🔒 Security Notes
+
+- Store API keys and secrets in environment variables.
+- Do not commit `.env` files.
+- Keep authentication secrets private.
+- Validate and handle API requests on the backend.
+
+## 🎯 Project Objective
+
+The objective of Smart Startup Builder is to make early-stage startup planning easier by combining AI-assisted idea generation with secure user authentication and database-backed plan management.
+
+## 👩‍💻 Developer
+
+**Hema Periyasamy**
+
+Full Stack Developer | AI Application Development
+
+## API Testing
+
+Postman
